@@ -1,12 +1,23 @@
-FROM node:alpine AS builder
-WORKDIR /app
-ADD package*.json ./
-RUN npm ci
-RUN npm run build -prod
+# ==== BUILD STAGE ====
+FROM node:18-alpine AS builder
 
-FROM  node:alpine
 WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+FROM node:18-alpine
+
+WORKDIR /app
+
 COPY --from=builder /app/dist ./dist
-ADD package*.json ./
+COPY package*.json ./
+
 RUN npm ci --omit=dev
-CMD [ "node", "./dist/main.js" ]
+
+CMD ["node", "dist/main.js"]
