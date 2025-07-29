@@ -9,4 +9,4 @@ jobs:
       - name: Install
         run: npm ci
       - name: Lint Check
-        uses: npm run lint
+        run: npm run lint
