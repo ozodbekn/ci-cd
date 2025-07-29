@@ -1,23 +1,38 @@
 name: Check
+
 on: push
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: CheckOut
         uses: actions/checkout@v4
-      - name: Install
+
+      - name: Install dependencies
         run: npm ci
+
       - name: Lint Check
         run: npm run lint
+
   test:
+    needs: [lint]
+    strategy:
+        matrix:
+            version: [20, 18, 22]
     runs-on: ubuntu-latest
     steps:
       - name: CheckOut
         uses: actions/checkout@v4
-      - name: Install
+
+      - uses: actions/setup-node@v4
+        with:
+            node-version: ${{matrix.version}}
+
+      - name: Install dependencies
         run: npm ci
+
       - name: Test Check
-        env:
-          PORT: ${{secrets.PORT}}
+        env: 
+          PORT: ${{ secrets.PORT }}
         run: npm run test
