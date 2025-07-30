@@ -27,10 +27,10 @@ jobs:
           PORT: ${{ secrets.PORT }}
         run: |
           ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
-          ssh -p $PORT $USER@$HOST "
+          ssh -p 22 $PORT $USER@$HOST "
             if [ ! -d $APP_DIR ]; then
               mkdir -p $APP_DIR
-              git clone https://github.com/ozodbekn/ci-cd.git $APP_DIR
+              git clone https://github.com//ci-cd.git $APP_DIR
               cd $APP_DIR
               echo PORT=$PORT > .env
             else
