@@ -1,24 +1,20 @@
 name: Deploy to VPS
-
 on:
   push:
     branches:
       - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Kodni yuklash
         uses: actions/checkout@v4
-
-      - name: SSH kalitini sozlash
+      - name: SSH kalitni sozlash
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
         shell: bash
-
       - name: Serverga deploy qilish
         env:
           HOST: ${{ secrets.HOST }}
@@ -30,10 +26,10 @@ jobs:
           ssh $USER@$HOST "
             if [ ! -d $APP_DIR ]; then
               mkdir -p $APP_DIR
-              git clone https://github.com//ci-cd.git $APP_DIR
+              git clone https://github.com/ozodbekn/ci-cd.git $APP_DIR
               cd $APP_DIR
-              echo PORT=$PORT > .env
-            else
+              echo 'PORT=${PORT}' > .env
+            else 
               cd $APP_DIR
               git pull origin main
             fi
